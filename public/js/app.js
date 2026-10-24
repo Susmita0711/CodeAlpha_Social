@@ -39,41 +39,41 @@ const PRESET_IMAGES = {
 const STORIES_DATA = [
   {
     id: 1,
-    name: 'Aarav',
+    name: 'Aarav (आरव)',
     location: 'Bengaluru ☕',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+    avatar: '/assets/avatars/aarav.jpg',
     media: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1000&q=80',
     caption: 'Bengaluru Tech Summit hackathon kick-off! All-nighter fueled by filter coffee. 🚀'
   },
   {
     id: 2,
-    name: 'Priya',
+    name: 'Priya (प्रिया)',
     location: 'Gujarat 🕌',
-    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80',
+    avatar: '/assets/avatars/priya.jpg',
     media: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1000&q=80',
     caption: 'Morning light dancing through the stone lattice at Adalaj Stepwell. Pure magic. ✨'
   },
   {
     id: 3,
-    name: 'Rohan',
+    name: 'Rohan (रोहन)',
     location: 'Old Delhi 🍲',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
+    avatar: '/assets/avatars/rohan.jpg',
     media: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=1000&q=80',
     caption: 'Fresh jalebis and rabri straight from the brass kadhai at Chandni Chowk! 🤤'
   },
   {
     id: 4,
-    name: 'Ananya',
+    name: 'Ananya (अनन्या)',
     location: 'Varanasi 🕉️',
-    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80',
+    avatar: '/assets/avatars/ananya.jpg',
     media: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1000&q=80',
     caption: 'Ganga Maha Aarti at sunset. The energy here is spiritually overwhelming. 🙏'
   },
   {
     id: 5,
-    name: 'Vikram',
+    name: 'Vikram (विक्रम)',
     location: 'Amritsar 🌾',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80',
+    avatar: '/assets/avatars/vikram.jpg',
     media: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80',
     caption: 'Golden sunset over the mustard & wheat fields in Majha, Punjab. ☀️🚜'
   }
@@ -107,6 +107,9 @@ class CharchaApp {
     const savedUserId = localStorage.getItem('charcha_user_id');
     const matchedUser = this.allUsers.find(u => u.id == savedUserId);
     this.currentUser = matchedUser || this.allUsers[0];
+    if (this.currentUser) {
+      localStorage.setItem('charcha_user_id', this.currentUser.id);
+    }
 
     this.updateUserUI();
     await this.loadFeed();

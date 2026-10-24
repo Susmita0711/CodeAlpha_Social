@@ -112,6 +112,16 @@ a {
   text-decoration: none;
 }
 
+/* Tiranga Top Strip */
+.tiranga-strip {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, #ff671f 0%, #ff671f 33.3%, #ffffff 33.3%, #ffffff 66.6%, #046a38 66.6%, #046a38 100%);
+  position: sticky;
+  top: 0;
+  z-index: 102;
+}
+
 /* --------------------------------------------------------------------------
    Header / Top Navigation
    -------------------------------------------------------------------------- */
@@ -1982,3 +1992,132 @@ body.dark-mode .author-badge {
     grid-template-columns: 1fr;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Indian Cultural Elements: Welcome Ribbon & Topic Chips
+   -------------------------------------------------------------------------- */
+.desi-welcome-ribbon {
+  background: linear-gradient(135deg, rgba(255, 103, 31, 0.12) 0%, rgba(79, 70, 229, 0.08) 100%), var(--bg-surface);
+  border: 1px solid rgba(255, 103, 31, 0.35);
+  border-left: 5px solid #ff671f;
+  border-radius: var(--radius-lg);
+  padding: 1.15rem 1.35rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.desi-welcome-ribbon::after {
+  content: "☸";
+  position: absolute;
+  right: -15px;
+  top: -20px;
+  font-size: 5rem;
+  color: rgba(255, 103, 31, 0.06);
+  pointer-events: none;
+}
+
+.dwr-namaste {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--saffron-600);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+body.dark-mode .dwr-namaste {
+  color: #ff9f43;
+}
+
+.dwr-hi {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.dwr-sub {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+.dwr-live-pill {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #046a38;
+  background-color: rgba(4, 106, 56, 0.14);
+  border: 1px solid rgba(4, 106, 56, 0.25);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+body.dark-mode .dwr-live-pill {
+  color: #34d399;
+  background-color: rgba(52, 211, 153, 0.15);
+  border-color: rgba(52, 211, 153, 0.3);
+}
+
+.dwr-live-pill i {
+  font-size: 0.55rem;
+  color: #10b981;
+  animation: pulse-dot 1.5s infinite;
+}
+
+@keyframes pulse-dot {
+  0% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 0.4; transform: scale(0.9); }
+}
+
+/* Desi Topic Chips Bar */
+.desi-topic-chips-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.1rem 0 0.85rem 0;
+  scrollbar-width: none;
+}
+
+.desi-topic-chips-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.desi-chip-btn {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.42rem 0.95rem;
+  border-radius: var(--radius-full);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.desi-chip-btn:hover {
+  background-color: var(--saffron-light);
+  border-color: var(--saffron-500);
+  color: var(--saffron-600);
+  transform: translateY(-1px);
+}
+
+.desi-chip-btn.active {
+  background: var(--saffron-gradient);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(255, 103, 31, 0.35);
+}
+

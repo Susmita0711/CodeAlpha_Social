@@ -18,6 +18,9 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <!-- Tiranga Top Strip -->
+  <div class="tiranga-strip"></div>
+
   <!-- Header / Navigation -->
   <header class="app-header">
     <div class="header-container">
@@ -28,13 +31,13 @@
           </div>
           <div class="brand-text">
             <span class="brand-name">Charcha <span class="hindi-sub">चर्चा</span></span>
-            <span class="brand-tagline">Voices of Bharat</span>
+            <span class="brand-tagline">आवाज़ भारत की • Voices of Bharat 🇮🇳</span>
           </div>
         </div>
 
         <div class="search-box">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="globalSearchInput" placeholder="Search posts, #tags, or creators...">
+          <input type="text" id="globalSearchInput" placeholder="खोजें: पोस्ट, #टैग, या भारतीय क्रिएटर...">
           <button id="clearSearchBtn" class="clear-btn" style="display: none;" onclick="app.clearSearch()">
             <i class="fa-solid fa-xmark"></i>
           </button>
@@ -48,15 +51,15 @@
             <img id="headerUserAvatar" src="" alt="Avatar" class="header-avatar">
             <div class="header-user-meta">
               <span class="header-user-name" id="headerUserName">Loading...</span>
-              <span class="header-user-role">Active Persona <i class="fa-solid fa-chevron-down"></i></span>
+              <span class="header-user-role">सक्रिय क्रिएटर <i class="fa-solid fa-chevron-down"></i></span>
             </div>
           </div>
 
           <div class="user-dropdown-menu" id="userDropdownMenu">
             <div class="dropdown-header">
-              <span>Switch Active Account</span>
+              <span>भारतीय प्रोफाइल चुनें (Switch Persona)</span>
               <button class="add-user-btn" onclick="app.openNewUserModal()" title="Create New Account">
-                <i class="fa-solid fa-user-plus"></i> New
+                <i class="fa-solid fa-user-plus"></i> नया क्रिएटर
               </button>
             </div>
             <div class="dropdown-users-list" id="dropdownUsersList">
@@ -87,62 +90,84 @@
           <div class="mini-info">
             <h3 id="sidebarName" onclick="app.viewCurrentUserProfile()">Loading...</h3>
             <span class="mini-username" id="sidebarUsername">@loading</span>
-            <span class="mini-badge" id="sidebarBadge">🇮🇳 Desi Creator</span>
+            <span class="mini-badge" id="sidebarBadge">🇮🇳 भारतीय क्रिएटर</span>
           </div>
           <div class="mini-stats">
             <div class="mini-stat" onclick="app.openProfileModal(app.currentUser.id, 'posts')">
               <span class="stat-number" id="sidebarPostsCount">0</span>
-              <span class="stat-label">Posts</span>
+              <span class="stat-label">चर्चा (Posts)</span>
             </div>
             <div class="mini-stat" onclick="app.openProfileModal(app.currentUser.id, 'followers')">
               <span class="stat-number" id="sidebarFollowersCount">0</span>
-              <span class="stat-label">Followers</span>
+              <span class="stat-label">फॉलोअर्स</span>
             </div>
             <div class="mini-stat" onclick="app.openProfileModal(app.currentUser.id, 'following')">
               <span class="stat-number" id="sidebarFollowingCount">0</span>
-              <span class="stat-label">Following</span>
+              <span class="stat-label">फॉलोइंग</span>
             </div>
           </div>
           <button class="btn-view-profile" onclick="app.viewCurrentUserProfile()">
-            <i class="fa-regular fa-user"></i> View Profile
+            <i class="fa-regular fa-user"></i> प्रोफ़ाइल देखें (View Profile)
           </button>
         </div>
       </div>
 
       <nav class="nav-menu">
         <a href="javascript:void(0)" class="nav-item active" id="navFeedAll" onclick="app.setFeedType('all')">
-          <i class="fa-solid fa-house"></i>
-          <span>Home Feed</span>
+          <i class="fa-solid fa-house text-saffron"></i>
+          <span>मुख्य मंच (Home Feed)</span>
         </a>
         <a href="javascript:void(0)" class="nav-item" id="navFeedFollowing" onclick="app.setFeedType('following')">
-          <i class="fa-solid fa-user-group"></i>
-          <span>Following Only</span>
+          <i class="fa-solid fa-user-group text-indigo"></i>
+          <span>फॉलो किए गए (Following)</span>
         </a>
         <a href="javascript:void(0)" class="nav-item" id="navFeedTrending" onclick="app.setFeedType('trending')">
-          <i class="fa-solid fa-fire-flame-curved"></i>
-          <span>Trending in India</span>
+          <i class="fa-solid fa-fire-flame-curved text-saffron"></i>
+          <span>ट्रेंडिंग भारत (Trending)</span>
         </a>
         <a href="javascript:void(0)" class="nav-item" onclick="app.viewCurrentUserProfile()">
-          <i class="fa-solid fa-address-card"></i>
-          <span>My Profile & Posts</span>
+          <i class="fa-solid fa-address-card text-emerald"></i>
+          <span>मेरी प्रोफ़ाइल (My Profile)</span>
         </a>
       </nav>
 
       <div class="sidebar-card quick-create-card">
-        <h4><i class="fa-solid fa-sparkles text-amber"></i> Share Your Thoughts</h4>
-        <p>What's happening in your city or community today?</p>
+        <h4><i class="fa-solid fa-om text-saffron"></i> चाय पे चर्चा</h4>
+        <p>आज आपके शहर या राज्य में क्या खास है? विचार साझा करें!</p>
         <button class="btn-primary-gradient w-100" onclick="app.focusCreatePost()">
-          <i class="fa-solid fa-pen-nib"></i> Compose Charcha
+          <i class="fa-solid fa-pen-nib"></i> नई चर्चा लिखें (Compose)
         </button>
       </div>
 
       <div class="sidebar-footer">
-        <p>© 2026 Charcha (चर्चा) • Made with ❤️ in India</p>
+        <p>🇮🇳 © 2026 Charcha (चर्चा) • Made with ❤️ in Bharat</p>
       </div>
     </aside>
 
     <!-- Center Feed Column -->
     <section class="feed-center">
+      <!-- Desi Welcome Ribbon -->
+      <div class="desi-welcome-ribbon">
+        <div class="dwr-left">
+          <div class="dwr-namaste">🙏 नमस्ते भारत! <span class="dwr-hi">(Namaste Bharat)</span></div>
+          <div class="dwr-sub">The Indian Social Network • Connect, celebrate our culture, tech, and stories</div>
+        </div>
+        <div class="dwr-right">
+          <span class="dwr-live-pill"><i class="fa-solid fa-circle-dot"></i> Live Across 28 States & 8 UTs</span>
+        </div>
+      </div>
+
+      <!-- Quick Indian Topic Filter Pills -->
+      <div class="desi-topic-chips-bar">
+        <button class="desi-chip-btn active" onclick="app.setFeedType('all')">🇮🇳 समस्त भारत (All)</button>
+        <button class="desi-chip-btn" onclick="app.filterByTag('#ChaiPeCharcha')">☕ #ChaiPeCharcha</button>
+        <button class="desi-chip-btn" onclick="app.filterByTag('#TechIndia')">🚀 #TechIndia</button>
+        <button class="desi-chip-btn" onclick="app.filterByTag('#IncredibleIndia')">🕌 #IncredibleIndia</button>
+        <button class="desi-chip-btn" onclick="app.filterByTag('#FoodOfIndia')">🍲 #FoodOfIndia</button>
+        <button class="desi-chip-btn" onclick="app.filterByTag('#VaranasiGhats')">🕉️ #VaranasiGhats</button>
+        <button class="desi-chip-btn" onclick="app.filterByTag('#AgriTech')">🌾 #AgriTech</button>
+      </div>
+
       <!-- Stories / Fleets Reel -->
       <div class="stories-reel-wrapper">
         <div class="stories-track" id="storiesTrack">
@@ -256,26 +281,26 @@
     <aside class="sidebar-right">
       <!-- Platform Stats Bar -->
       <div class="sidebar-card stats-card">
-        <h4 class="card-heading"><i class="fa-solid fa-chart-simple text-saffron"></i> Platform Live Stats</h4>
+        <h4 class="card-heading"><i class="fa-solid fa-chart-simple text-saffron"></i> मंच के आंकड़े (Platform Stats)</h4>
         <div class="stats-grid">
           <div class="stat-box">
             <span class="stat-val" id="statUsers">5</span>
-            <span class="stat-lbl">Creators</span>
+            <span class="stat-lbl">क्रिएटर (Creators)</span>
           </div>
           <div class="stat-box">
             <span class="stat-val" id="statPosts">5</span>
-            <span class="stat-lbl">Stories</span>
+            <span class="stat-lbl">चर्चाएं (Stories)</span>
           </div>
           <div class="stat-box">
             <span class="stat-val" id="statLikes">16</span>
-            <span class="stat-lbl">Applauds</span>
+            <span class="stat-lbl">प्रशंसा (Applauds)</span>
           </div>
         </div>
       </div>
 
       <!-- Trending Hashtags in Bharat -->
       <div class="sidebar-card trending-card">
-        <h4 class="card-heading"><i class="fa-solid fa-arrow-trend-up text-saffron"></i> Trending in Bharat 🇮🇳</h4>
+        <h4 class="card-heading"><i class="fa-solid fa-arrow-trend-up text-saffron"></i> भारत में ट्रेंडिंग (#Trending)</h4>
         <div class="trending-list" id="trendingTagsList">
           <!-- Rendered dynamically -->
         </div>
@@ -284,7 +309,7 @@
       <!-- Suggested Desi Creators to Follow -->
       <div class="sidebar-card creators-card">
         <div class="card-header-flex">
-          <h4 class="card-heading"><i class="fa-solid fa-user-plus text-indigo"></i> Desi Creators to Follow</h4>
+          <h4 class="card-heading"><i class="fa-solid fa-user-plus text-indigo"></i> जाने-माने क्रिएटर (Who to Follow)</h4>
         </div>
         <div class="creators-list" id="suggestedCreatorsList">
           <!-- Rendered dynamically -->

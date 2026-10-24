@@ -90,8 +90,8 @@ app.post('/api/users', async (req, res) => {
       return res.status(400).json({ error: 'Username and Name are required' });
     }
 
-    const defaultAvatar = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80';
-    const defaultCover = 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=1200&q=80';
+    const defaultAvatar = '/assets/avatars/aarav.jpg';
+    const defaultCover = 'https://images.unsplash.com/photo-1596176530529-78163a4f7af2?auto=format&fit=crop&w=1200&q=80';
 
     const result = await run(
       `INSERT INTO users (username, name, bio, location, avatar, cover_photo, badge) VALUES (?, ?, ?, ?, ?, ?, ?)`,
