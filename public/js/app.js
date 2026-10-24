@@ -39,7 +39,7 @@ const PRESET_IMAGES = {
 const STORIES_DATA = [
   {
     id: 1,
-    name: 'Aarav (आरव)',
+    name: 'Aarav',
     location: 'Bengaluru ☕',
     avatar: '/assets/avatars/aarav.jpg',
     media: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1000&q=80',
@@ -47,7 +47,7 @@ const STORIES_DATA = [
   },
   {
     id: 2,
-    name: 'Priya (प्रिया)',
+    name: 'Priya',
     location: 'Gujarat 🕌',
     avatar: '/assets/avatars/priya.jpg',
     media: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1000&q=80',
@@ -55,7 +55,7 @@ const STORIES_DATA = [
   },
   {
     id: 3,
-    name: 'Rohan (रोहन)',
+    name: 'Rohan',
     location: 'Old Delhi 🍲',
     avatar: '/assets/avatars/rohan.jpg',
     media: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=1000&q=80',
@@ -63,7 +63,7 @@ const STORIES_DATA = [
   },
   {
     id: 4,
-    name: 'Ananya (अनन्या)',
+    name: 'Ananya',
     location: 'Varanasi 🕉️',
     avatar: '/assets/avatars/ananya.jpg',
     media: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1000&q=80',
@@ -71,7 +71,7 @@ const STORIES_DATA = [
   },
   {
     id: 5,
-    name: 'Vikram (विक्रम)',
+    name: 'Vikram',
     location: 'Amritsar 🌾',
     avatar: '/assets/avatars/vikram.jpg',
     media: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80',

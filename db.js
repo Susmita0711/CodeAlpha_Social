@@ -1,6 +1,5 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
-const fs = require('fs');
 
 const dbPath = path.join(__dirname, 'social.db');
 const db = new sqlite3.Database(dbPath);
@@ -32,7 +31,7 @@ function all(sql, params = []) {
   });
 }
 
-async function initDB(forceReseed = false) {
+async function initDB() {
   db.serialize();
 
   await run(`PRAGMA foreign_keys = ON;`);
@@ -99,14 +98,15 @@ async function initDB(forceReseed = false) {
   `);
 
   const userCount = await get(`SELECT COUNT(*) as count FROM users`);
-  // If forceReseed or user count is 0 or avatars still contain old foreign links
-  const sampleUser = await get(`SELECT avatar FROM users LIMIT 1`);
-  const needsReseed = forceReseed || userCount.count === 0 || (sampleUser && sampleUser.avatar && sampleUser.avatar.includes('unsplash.com/photo-1534528741775'));
+  const sampleUser = await get(`SELECT avatar, name FROM users LIMIT 1`);
+  const needsReseed = userCount.count === 0 || 
+                      (sampleUser && sampleUser.avatar && sampleUser.avatar.includes('unsplash')) ||
+                      (sampleUser && sampleUser.name && sampleUser.name.includes('('));
 
   if (needsReseed) {
-    console.log('🇮🇳 Seeding 100% authentic Indian creators and cultural posts...');
+    console.log('Seeding authentic Indian profiles in English...');
     await resetAndSeedDatabase();
-    console.log('✅ Authentic Indian database ready!');
+    console.log('Database ready!');
   }
 }
 
@@ -119,55 +119,55 @@ async function resetAndSeedDatabase() {
   try {
     await run(`DELETE FROM sqlite_sequence WHERE name IN ('users', 'posts', 'comments');`);
   } catch (e) {
-    // ignore if table doesn't exist
+    // Ignore if sequence table not present
   }
 
-  // 100% Authentic Indian Personas with local generated Indian portraits
+  // 100% Authentic Indian Personas with Indian photos and pure English text
   const users = [
     {
       username: 'aarav_sharma',
-      name: 'Aarav Sharma (आरव)',
-      bio: 'AI & Web3 engineer building for Bharat 🇮🇳 | Chai lover ☕ | Weekend road trips across Western Ghats 🏍️',
+      name: 'Aarav Sharma',
+      bio: 'AI & Web3 engineer building for India 🇮🇳 | Chai lover ☕ | Weekend road trips across Western Ghats 🏍️',
       location: 'Bengaluru, Karnataka',
       avatar: '/assets/avatars/aarav.jpg',
       cover_photo: 'https://images.unsplash.com/photo-1596176530529-78163a4f7af2?auto=format&fit=crop&w=1200&q=80',
-      badge: 'टेक फाउंडर 🚀'
+      badge: 'Tech Founder 🚀'
     },
     {
       username: 'priya_patel',
-      name: 'Priya Patel (प्रिया)',
-      bio: 'UI/UX Designer & Folk Art Curator 🎨 | Celebrating Kutch Bandhani, Kalamkari & Rajputana aesthetics ✨',
+      name: 'Priya Patel',
+      bio: 'UI/UX Designer & Folk Art Curator 🎨 | Celebrating Indian handloom, Bandhani & heritage craft aesthetics ✨',
       location: 'Ahmedabad, Gujarat',
       avatar: '/assets/avatars/priya.jpg',
       cover_photo: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80',
-      badge: 'कलाकार & डिज़ाइनर 🎨'
+      badge: 'Design Lead 🎨'
     },
     {
       username: 'rohan_verma',
-      name: 'Rohan Verma (रोहन)',
-      bio: 'Purani Dilli Food Explorer 🥘 | Discovering authentic recipes from Chandni Chowk to Lucknow & Kolkata 🌶️',
+      name: 'Rohan Verma',
+      bio: 'Old Delhi Street Food Explorer 🥘 | Discovering authentic recipes from Chandni Chowk to Lucknow & Kolkata 🌶️',
       location: 'Old Delhi, Delhi',
       avatar: '/assets/avatars/rohan.jpg',
       cover_photo: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=1200&q=80',
-      badge: 'देसी फूडी 🍛'
+      badge: 'Food Explorer 🍛'
     },
     {
       username: 'ananya_iyer',
-      name: 'Ananya Iyer (अनन्या)',
+      name: 'Ananya Iyer',
       bio: 'Heritage Architect & Temple Documenter 📸 | Preserving Dravidian stone architecture & UNESCO heritage sites 🛕',
       location: 'Chennai, Tamil Nadu',
       avatar: '/assets/avatars/ananya.jpg',
       cover_photo: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80',
-      badge: 'धरोहर संरक्षक 🏛️'
+      badge: 'Heritage Architect 🏛️'
     },
     {
       username: 'vikram_singh',
-      name: 'Vikramjit Singh (विक्रम)',
-      bio: 'AgriTech builder & Smart Farming advocate 🌾 | Proud Punjabi farmer bridging drone tech with fertile soil 🚜',
+      name: 'Vikramjit Singh',
+      bio: 'AgriTech builder & Smart Farming advocate 🌾 | Proud farmer bridging drone technology with fertile soil 🚜',
       location: 'Amritsar, Punjab',
       avatar: '/assets/avatars/vikram.jpg',
       cover_photo: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80',
-      badge: 'कृषि टेक चैंपियन 🌱'
+      badge: 'AgriTech Champion 🌱'
     }
   ];
 
@@ -202,41 +202,41 @@ async function resetAndSeedDatabase() {
     await run(`INSERT OR IGNORE INTO followers (follower_id, following_id) VALUES (?, ?)`, [follower, following]);
   }
 
-  // Authentic Indian Posts
+  // Posts in English with authentic Indian themes
   const posts = [
     {
       user_key: 'aarav_sharma',
-      content: 'Early morning filter coffee at Brahmin’s Coffee Bar, Shankarapura! ☕💻 We just launched the open-source Indic Language AI model supporting Hindi, Tamil, Telugu, Bengali & Marathi. The developer energy in Bengaluru is truly unmatched. \n\nBharat is no longer just consuming tech — we are building the future! 🇮🇳🚀 #TechIndia #NammaBengaluru #BuildInBharat #ChaiPeCharcha',
+      content: 'Early morning filter coffee at Brahmin’s Coffee Bar, Bengaluru! ☕💻 We just launched our open-source Indian vernacular voice AI model. The tech developer energy here in Bengaluru is truly unmatched.\n\nIndia is building for the next billion users! What are you creating this weekend? 🇮🇳🚀 #TechIndia #NammaBengaluru #BuildInIndia #ChaiPeCharcha',
       image_url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1000&q=80',
-      tags: '#TechIndia,#NammaBengaluru,#BuildInBharat,#ChaiPeCharcha',
+      tags: '#TechIndia,#NammaBengaluru,#BuildInIndia,#ChaiPeCharcha',
       location: 'Koramangala, Bengaluru'
     },
     {
       user_key: 'priya_patel',
-      content: 'अद्भुत शिल्पकारी! Just finished field documentation at Adalaj Stepwell (अडालज की बावड़ी). Built in 1498, these five-storey sandstone pavilions combine Solanki and Indo-Islamic architecture with exquisite floral carvings. \n\nEvery corner reminds us how rich Indian design roots are. What is your favorite historic monument in India? 🕌✨ #IncredibleIndia #IndianArt #AdalajVav #DesiDesign',
+      content: 'Incredible craftsmanship! Just finished architectural documentation at Adalaj Stepwell in Gujarat. Built in 1498, these five-storey sandstone pavilions combine Solanki and Indo-Islamic design with intricate floral carvings.\n\nEvery corridor reminds us of India’s rich architectural heritage. What is your favorite historic monument in India? 🕌✨ #IncredibleIndia #IndianArt #AdalajVav #DesiDesign',
       image_url: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1000&q=80',
       tags: '#IncredibleIndia,#IndianArt,#AdalajVav,#DesiDesign',
       location: 'Adalaj, Gujarat'
     },
     {
       user_key: 'rohan_verma',
-      content: 'The holy debate of Indian food: Lucknowi Awadhi Dum Biryani vs Hyderabadi Dum vs Kolkata Biryani with aloo! 🍲 \n\nToday I spent 4 hours in the spice lanes of Khari Baoli, Old Delhi, with Ustad ji uncovering 80-year-old potli masala secrets. Pure saffron, shahi jeera, and kewra aroma in the air. \n\nTell me in the comments: Which city in India has your heart for food? 👇 #FoodOfIndia #PuraniDilli #BiryaniLovers #SwadBharat',
+      content: 'The ultimate debate of Indian food: Lucknowi Dum Biryani vs Hyderabadi Dum vs Kolkata Biryani with aloo! 🍲\n\nToday I spent 4 hours in the spice lanes of Khari Baoli, Old Delhi, exploring 80-year-old traditional spice blends with local master chefs. Pure saffron, shahi jeera, and kewra aroma everywhere.\n\nTell me in the comments: Which city has your favorite food in India? 👇 #FoodOfIndia #PuraniDilli #BiryaniLovers #DesiFlavors',
       image_url: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=1000&q=80',
-      tags: '#FoodOfIndia,#PuraniDilli,#BiryaniLovers,#SwadBharat',
+      tags: '#FoodOfIndia,#PuraniDilli,#BiryaniLovers,#DesiFlavors',
       location: 'Chandni Chowk, Old Delhi'
     },
     {
       user_key: 'ananya_iyer',
-      content: 'काशी की शाम! Ganga Maha Aarti at Dashashwamedh Ghat, Varanasi. The reverberation of conch shells (शंख), chanting of Vedic shlokas, and hundreds of brass lamps lighting up the holy river. \n\nThere is a divine spiritual stillness here that reconnects you to the very soul of India. Har Har Mahadev! 🙏🕉️ #VaranasiGhats #SpiritualIndia #KashiAarti #BharatDarshan',
+      content: 'Sunset at Dashashwamedh Ghat in Varanasi. The reverberation of brass conch shells, chanting of Vedic mantras, and hundreds of diyas floating down the sacred Ganga.\n\nA serene and unforgettable spiritual stillness that connects you to the soul of India. 🙏🕉️ #VaranasiGhats #SpiritualIndia #KashiAarti #IncredibleIndia',
       image_url: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1000&q=80',
-      tags: '#VaranasiGhats,#SpiritualIndia,#KashiAarti,#BharatDarshan',
+      tags: '#VaranasiGhats,#SpiritualIndia,#KashiAarti,#IncredibleIndia',
       location: 'Dashashwamedh Ghat, Varanasi'
     },
     {
       user_key: 'vikram_singh',
-      content: 'ਸਤਿ ਸ਼੍ਰੀ ਅਕਾਲ! Golden sunset at our wheat fields in Amritsar outskirts. We installed solar-assisted precision drip irrigation across 18 acres, saving 40% water this season! \n\nDesi farmers are leading the green tech transition with pride. Jai Jawan, Jai Kisan! 🌾🚜☀️ #AgriTech #PunjabDiMitti #JaiKisan #SmartFarming',
+      content: 'Golden sunset over our wheat fields in Amritsar! We installed solar-powered precision drip irrigation across 18 acres, saving 40% water this season!\n\nIndian farmers and agritech founders are modernizing agriculture with passion and technology. 🌾🚜☀️ #AgriTech #SmartFarming #PunjabFields #ModernIndia',
       image_url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80',
-      tags: '#AgriTech,#PunjabDiMitti,#JaiKisan,#SmartFarming',
+      tags: '#AgriTech,#SmartFarming,#PunjabFields,#ModernIndia',
       location: 'Amritsar Outskirts, Punjab'
     }
   ];
@@ -258,44 +258,44 @@ async function resetAndSeedDatabase() {
     postIds[0], userMap['ananya_iyer'],
     postIds[0], userMap['vikram_singh']
   ]);
-  await run(`INSERT INTO likes (post_id, user_id) VALUES (?, ?), (?, ?), (?, ?)`, [
+  await run(`INSERT INTO likes (post_id, user_id) VALUES (?, ?), (?, ?)`, [
     postIds[1], userMap['aarav_sharma'],
     postIds[1], userMap['rohan_verma'],
     postIds[1], userMap['ananya_iyer']
   ]);
-  await run(`INSERT INTO likes (post_id, user_id) VALUES (?, ?), (?, ?), (?, ?)`, [
+  await run(`INSERT INTO likes (post_id, user_id) VALUES (?, ?), (?, ?)`, [
     postIds[2], userMap['aarav_sharma'],
     postIds[2], userMap['priya_patel'],
     postIds[2], userMap['vikram_singh']
   ]);
-  await run(`INSERT INTO likes (post_id, user_id) VALUES (?, ?), (?, ?), (?, ?)`, [
+  await run(`INSERT INTO likes (post_id, user_id) VALUES (?, ?), (?, ?)`, [
     postIds[3], userMap['aarav_sharma'],
     postIds[3], userMap['priya_patel'],
     postIds[3], userMap['ananya_iyer']
   ]);
-  await run(`INSERT INTO likes (post_id, user_id) VALUES (?, ?), (?, ?)`, [
+  await run(`INSERT INTO likes (post_id, user_id) VALUES (?, ?)`, [
     postIds[4], userMap['aarav_sharma'],
     postIds[4], userMap['rohan_verma']
   ]);
 
-  // Comments
+  // Comments in English
   await run(`INSERT INTO comments (post_id, user_id, content) VALUES (?, ?, ?)`, [
-    postIds[0], userMap['priya_patel'], 'शाबाश आरव भाई! Would love to contribute to the vernacular UI font styling for Hindi and Gujarati scripts!'
+    postIds[0], userMap['priya_patel'], 'Great initiative Aarav! Would love to contribute to the vernacular typography and UI design!'
   ]);
   await run(`INSERT INTO comments (post_id, user_id, content) VALUES (?, ?, ?)`, [
-    postIds[0], userMap['rohan_verma'], 'Bengaluru filter coffee + cutting chai fuels the whole Indian IT ecosystem! ☕🔥'
+    postIds[0], userMap['rohan_verma'], 'Bengaluru filter coffee and cutting chai fuels the entire Indian startup ecosystem! ☕🔥'
   ]);
   await run(`INSERT INTO comments (post_id, user_id, content) VALUES (?, ?, ?)`, [
-    postIds[1], userMap['ananya_iyer'], 'Breathtaking capture Priya! Indian stepwells are masterclasses in sustainable subterranean cooling and acoustic geometry.'
+    postIds[1], userMap['ananya_iyer'], 'Breathtaking capture Priya! Indian stepwells are masterclasses in sustainable subterranean cooling.'
   ]);
   await run(`INSERT INTO comments (post_id, user_id, content) VALUES (?, ?, ?)`, [
-    postIds[2], userMap['aarav_sharma'], 'Kolkata biryani with the soft potato and egg has no competition! Fight me in the replies 😂🍛'
+    postIds[2], userMap['aarav_sharma'], 'Kolkata biryani with the soft potato and egg has no competition! 🍛'
   ]);
   await run(`INSERT INTO comments (post_id, user_id, content) VALUES (?, ?, ?)`, [
-    postIds[2], userMap['vikram_singh'], 'Bhai, try Amritsari kulcha with chhole next time you are in Punjab! You will forget everything else.'
+    postIds[2], userMap['vikram_singh'], 'Try Amritsari kulcha with chhole next time you visit Punjab! Pure perfection.'
   ]);
   await run(`INSERT INTO comments (post_id, user_id, content) VALUES (?, ?, ?)`, [
-    postIds[3], userMap['aarav_sharma'], 'Har Har Mahadev! Watching the aarti by the holy Ganga is an unforgettable experience. 🙏'
+    postIds[3], userMap['aarav_sharma'], 'Watching the evening aarti along the holy Ganga is an unforgettable experience. 🙏'
   ]);
 }
 
