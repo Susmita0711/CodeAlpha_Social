@@ -1,4 +1,4 @@
-# Charcha (चर्चा) • The Indian Social Network 🇮🇳
+# Charcha (चर्चा) • The Indian Social Network
 
 [![Node.js](https://img.shields.io/badge/Node.js-v24.x-green.svg)](https://nodejs.org/)
 [![Express.js](https://img.shields.io/badge/Express-5.x-blue.svg)](https://expressjs.com/)
@@ -37,6 +37,12 @@ A modern, full-stack Indian social media platform celebrating Bharat's diverse c
 * **Database:** SQLite3 with relational foreign keys (`users`, `posts`, `comments`, `likes`, `followers`).
 
 ---
+
+## 🖼️ Interface
+<img width="1907" height="887" alt="image" src="https://github.com/user-attachments/assets/aebfc9da-19b8-4c29-bcca-4977bd4ee4b8" />
+
+<img width="843" height="820" alt="image" src="https://github.com/user-attachments/assets/9ed43166-32ab-49e7-9b73-8fc70c88ff1c" />
+
 
 ## 🚀 Getting Started Locally
 
