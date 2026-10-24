@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charcha (चर्चा) • The Indian Social Network</title>
+  <meta name="description" content="Charcha is a vibrant Indian social media platform to connect, share stories, explore Indian culture, tech, and celebrate Bharat.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="header-left">
+        <div class="brand-logo" onclick="app.setFeedType('all')">
+          <div class="logo-icon">
+            <span class="chakra-symbol">☸</span>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">Charcha <span class="hindi-sub">चर्चा</span></span>
+            <span class="brand-tagline">Voices of Bharat</span>
+          </div>
+        </div>
+
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="globalSearchInput" placeholder="Search posts, #tags, or creators...">
+          <button id="clearSearchBtn" class="clear-btn" style="display: none;" onclick="app.clearSearch()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Active User Switcher (For Pair Testing & Demonstration) -->
+        <div class="user-switcher-wrapper">
+          <div class="active-user-chip" id="currentUserChip" onclick="app.toggleUserMenu()">
+            <img id="headerUserAvatar" src="" alt="Avatar" class="header-avatar">
+            <div class="header-user-meta">
+              <span class="header-user-name" id="headerUserName">Loading...</span>
+              <span class="header-user-role">Active Persona <i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+          </div>
+
+          <div class="user-dropdown-menu" id="userDropdownMenu">
+            <div class="dropdown-header">
+              <span>Switch Active Account</span>
+              <button class="add-user-btn" onclick="app.openNewUserModal()" title="Create New Account">
+                <i class="fa-solid fa-user-plus"></i> New
+              </button>
+            </div>
+            <div class="dropdown-users-list" id="dropdownUsersList">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-create-post-mobile" onclick="app.focusCreatePost()" title="New Post">
+          <i class="fa-solid fa-feather-pointed"></i>
+        </button>
+
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="app.toggleTheme()" title="Toggle Theme">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+    <!-- Left Navigation Sidebar -->
+    <aside class="sidebar-left">
+      <div class="sidebar-card user-mini-card" id="userMiniCard">
+        <div class="mini-card-cover" id="sidebarCover"></div>
+        <div class="mini-card-content">
+          <img id="sidebarAvatar" src="" alt="Profile Avatar" class="mini-avatar" onclick="app.viewCurrentUserProfile()">
+          <div class="mini-info">
+            <h3 id="sidebarName" onclick="app.viewCurrentUserProfile()">Loading...</h3>
+            <span class="mini-username" id="sidebarUsername">@loading</span>
+            <span class="mini-badge" id="sidebarBadge">🇮🇳 Desi Creator</span>
+          </div>
+          <div class="mini-stats">
+            <div class="mini-stat" onclick="app.openProfileModal(app.currentUser.id, 'posts')">
+              <span class="stat-number" id="sidebarPostsCount">0</span>
+              <span class="stat-label">Posts</span>
+            </div>
+            <div class="mini-stat" onclick="app.openProfileModal(app.currentUser.id, 'followers')">
+              <span class="stat-number" id="sidebarFollowersCount">0</span>
+              <span class="stat-label">Followers</span>
+            </div>
+            <div class="mini-stat" onclick="app.openProfileModal(app.currentUser.id, 'following')">
+              <span class="stat-number" id="sidebarFollowingCount">0</span>
+              <span class="stat-label">Following</span>
+            </div>
+          </div>
+          <button class="btn-view-profile" onclick="app.viewCurrentUserProfile()">
+            <i class="fa-regular fa-user"></i> View Profile
+          </button>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="javascript:void(0)" class="nav-item active" id="navFeedAll" onclick="app.setFeedType('all')">
+          <i class="fa-solid fa-house"></i>
+          <span>Home Feed</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-item" id="navFeedFollowing" onclick="app.setFeedType('following')">
+          <i class="fa-solid fa-user-group"></i>
+          <span>Following Only</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-item" id="navFeedTrending" onclick="app.setFeedType('trending')">
+          <i class="fa-solid fa-fire-flame-curved"></i>
+          <span>Trending in India</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-item" onclick="app.viewCurrentUserProfile()">
+          <i class="fa-solid fa-address-card"></i>
+          <span>My Profile & Posts</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-card quick-create-card">
+        <h4><i class="fa-solid fa-sparkles text-amber"></i> Share Your Thoughts</h4>
+        <p>What's happening in your city or community today?</p>
+        <button class="btn-primary-gradient w-100" onclick="app.focusCreatePost()">
+          <i class="fa-solid fa-pen-nib"></i> Compose Charcha
+        </button>
+      </div>
+
+      <div class="sidebar-footer">
+        <p>© 2026 Charcha (चर्चा) • Made with ❤️ in India</p>
+      </div>
+    </aside>
+
+    <!-- Center Feed Column -->
+    <section class="feed-center">
+      <!-- Stories / Fleets Reel -->
+      <div class="stories-reel-wrapper">
+        <div class="stories-track" id="storiesTrack">
+          <!-- Story items populated by JS -->
+        </div>
+      </div>
+
+      <!-- Feed Subtitle / Current Filter Notice -->
+      <div class="feed-header-banner" id="feedHeaderBanner" style="display: none;">
+        <div class="filter-indicator">
+          <i class="fa-solid fa-tag"></i> Filtered by: <span id="filterLabelText" class="highlight-pill">#tag</span>
+        </div>
+        <button class="btn-text-secondary" onclick="app.clearSearch()">
+          <i class="fa-solid fa-circle-xmark"></i> Clear Filter
+        </button>
+      </div>
+
+      <!-- Create Post Box -->
+      <div class="create-post-card" id="createPostCard">
+        <div class="create-post-top">
+          <img id="createPostUserAvatar" src="" alt="Avatar" class="composer-avatar">
+          <div class="composer-input-wrapper">
+            <textarea id="postContentInput" placeholder="Namaste! Kya chal raha hai? Share a story, tech insight, or photo... (Markdown & #tags supported)" rows="3"></textarea>
+          </div>
+        </div>
+
+        <!-- Optional Image Preview -->
+        <div class="composer-image-preview" id="composerImagePreview" style="display: none;">
+          <img id="previewImageSrc" src="" alt="Preview">
+          <button class="remove-preview-btn" onclick="app.removeComposerImage()" title="Remove Image">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Indian Quick Preset Photo Pills -->
+        <div class="preset-images-bar">
+          <span class="preset-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Indian Presets:</span>
+          <button type="button" class="preset-pill" onclick="app.setPresetImage('chai')">☕ Cutting Chai</button>
+          <button type="button" class="preset-pill" onclick="app.setPresetImage('monument')">🕌 Adalaj Stepwell</button>
+          <button type="button" class="preset-pill" onclick="app.setPresetImage('tech')">💻 Bengaluru Tech</button>
+          <button type="button" class="preset-pill" onclick="app.setPresetImage('ghats')">🕉️ Kashi Ghats</button>
+          <button type="button" class="preset-pill" onclick="app.setPresetImage('food')">🍲 Old Delhi Food</button>
+          <button type="button" class="preset-pill" onclick="app.setPresetImage('punjab')">🌾 Golden Fields</button>
+        </div>
+
+        <!-- Composer Inputs for Custom URL / Location / Tags -->
+        <div class="composer-extra-inputs" id="composerExtraInputs" style="display: none;">
+          <div class="input-row">
+            <div class="input-field-with-icon">
+              <i class="fa-solid fa-link"></i>
+              <input type="text" id="postImageUrlInput" placeholder="Image URL (Unsplash, web, or upload file below)..." oninput="app.onImageUrlChanged(this.value)">
+            </div>
+          </div>
+          <div class="input-row split-row">
+            <div class="input-field-with-icon">
+              <i class="fa-solid fa-location-dot"></i>
+              <input type="text" id="postLocationInput" placeholder="Location (e.g., Bengaluru, Marine Drive Mumbai)">
+            </div>
+            <div class="input-field-with-icon">
+              <i class="fa-solid fa-hashtag"></i>
+              <input type="text" id="postTagsInput" placeholder="Tags (e.g., #TechIndia, #Foodie)">
+            </div>
+          </div>
+        </div>
+
+        <div class="create-post-bottom">
+          <div class="composer-actions">
+            <label class="action-btn-pill" title="Upload an Image File">
+              <i class="fa-solid fa-cloud-arrow-up text-indigo"></i>
+              <span>Upload Photo</span>
+              <input type="file" id="postFileInput" accept="image/*" style="display: none;" onchange="app.handleFileUpload(this)">
+            </label>
+
+            <button type="button" class="action-btn-pill" onclick="app.toggleExtraInputs()" title="Add Location & Image URL">
+              <i class="fa-solid fa-sliders text-saffron"></i>
+              <span>Details</span>
+            </button>
+          </div>
+
+          <button class="btn-primary-gradient btn-post-submit" id="submitPostBtn" onclick="app.submitPost()">
+            <span>Post Charcha</span>
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Feed Navigation Tabs -->
+      <div class="feed-tabs-bar">
+        <button class="feed-tab active" id="tabFeedAll" onclick="app.setFeedType('all')">
+          <i class="fa-solid fa-sparkles"></i> For You
+        </button>
+        <button class="feed-tab" id="tabFeedFollowing" onclick="app.setFeedType('following')">
+          <i class="fa-solid fa-user-check"></i> Following Feed
+        </button>
+        <button class="feed-tab" id="tabFeedTrending" onclick="app.setFeedType('trending')">
+          <i class="fa-solid fa-fire"></i> Trending
+        </button>
+      </div>
+
+      <!-- Posts Stream Container -->
+      <div class="posts-stream" id="postsStream">
+        <!-- Rendered dynamically -->
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Loading the latest Charchas...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Sidebar -->
+    <aside class="sidebar-right">
+      <!-- Platform Stats Bar -->
+      <div class="sidebar-card stats-card">
+        <h4 class="card-heading"><i class="fa-solid fa-chart-simple text-saffron"></i> Platform Live Stats</h4>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <span class="stat-val" id="statUsers">5</span>
+            <span class="stat-lbl">Creators</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val" id="statPosts">5</span>
+            <span class="stat-lbl">Stories</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val" id="statLikes">16</span>
+            <span class="stat-lbl">Applauds</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trending Hashtags in Bharat -->
+      <div class="sidebar-card trending-card">
+        <h4 class="card-heading"><i class="fa-solid fa-arrow-trend-up text-saffron"></i> Trending in Bharat 🇮🇳</h4>
+        <div class="trending-list" id="trendingTagsList">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Suggested Desi Creators to Follow -->
+      <div class="sidebar-card creators-card">
+        <div class="card-header-flex">
+          <h4 class="card-heading"><i class="fa-solid fa-user-plus text-indigo"></i> Desi Creators to Follow</h4>
+        </div>
+        <div class="creators-list" id="suggestedCreatorsList">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- User Profile Modal (Comprehensive Profile View) -->
+  <div class="modal-overlay" id="profileModal" style="display: none;" onclick="app.closeProfileModalOnBackdrop(event)">
+    <div class="modal-dialog profile-dialog">
+      <button class="modal-close-btn" onclick="app.closeProfileModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="profile-hero">
+        <div class="profile-hero-cover" id="modalCoverPhoto"></div>
+        <div class="profile-hero-meta">
+          <div class="avatar-holder">
+            <img id="modalAvatar" src="" alt="Profile Avatar" class="profile-hero-avatar">
+          </div>
+          <div class="profile-hero-actions" id="modalHeroActions">
+            <!-- Follow or Edit Profile button rendered here -->
+          </div>
+        </div>
+
+        <div class="profile-details">
+          <div class="profile-title-row">
+            <h2 id="modalName">User Name</h2>
+            <span class="badge-pill" id="modalBadge">Tech Founder</span>
+          </div>
+          <p class="profile-username" id="modalUsername">@username</p>
+          <p class="profile-bio" id="modalBio">Bio description here...</p>
+
+          <div class="profile-extra-info">
+            <span><i class="fa-solid fa-location-dot"></i> <span id="modalLocation">Location</span></span>
+            <span><i class="fa-regular fa-calendar"></i> Joined Charcha Bharat</span>
+          </div>
+
+          <div class="profile-counts-row">
+            <div class="profile-count-item" onclick="app.switchProfileTab('posts')">
+              <strong id="modalPostsCount">0</strong> <span>Posts</span>
+            </div>
+            <div class="profile-count-item" onclick="app.switchProfileTab('followers')">
+              <strong id="modalFollowersCount">0</strong> <span>Followers</span>
+            </div>
+            <div class="profile-count-item" onclick="app.switchProfileTab('following')">
+              <strong id="modalFollowingCount">0</strong> <span>Following</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Tabs -->
+      <div class="profile-tabs-header">
+        <button class="profile-tab-btn active" id="profTabBtnPosts" onclick="app.switchProfileTab('posts')">
+          <i class="fa-solid fa-grid-2"></i> Charchas
+        </button>
+        <button class="profile-tab-btn" id="profTabBtnFollowers" onclick="app.switchProfileTab('followers')">
+          <i class="fa-solid fa-users"></i> Followers
+        </button>
+        <button class="profile-tab-btn" id="profTabBtnFollowing" onclick="app.switchProfileTab('following')">
+          <i class="fa-solid fa-user-check"></i> Following
+        </button>
+      </div>
+
+      <!-- Profile Tab Content Body -->
+      <div class="profile-tab-body">
+        <div id="profTabPosts" class="profile-tab-pane active">
+          <div id="profilePostsContainer" class="posts-stream"></div>
+        </div>
+        <div id="profTabFollowers" class="profile-tab-pane" style="display: none;">
+          <div id="profileFollowersContainer" class="users-list-pane"></div>
+        </div>
+        <div id="profTabFollowing" class="profile-tab-pane" style="display: none;">
+          <div id="profileFollowingContainer" class="users-list-pane"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <div class="modal-overlay" id="editProfileModal" style="display: none;" onclick="app.closeEditModalOnBackdrop(event)">
+    <div class="modal-dialog small-dialog">
+      <button class="modal-close-btn" onclick="app.closeEditProfileModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-pen-to-square text-saffron"></i> Edit Profile</h3>
+      </div>
+      <form id="editProfileForm" onsubmit="app.handleSaveProfile(event)">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="editNameInput" required>
+        </div>
+        <div class="form-group">
+          <label>Bio (Short description)</label>
+          <textarea id="editBioInput" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Location (City, State)</label>
+          <input type="text" id="editLocationInput" placeholder="e.g. Pune, Maharashtra" required>
+        </div>
+        <div class="form-group">
+          <label>Badge / Profession Tag</label>
+          <input type="text" id="editBadgeInput" placeholder="e.g. AI Researcher 🚀, Food Blogger 🍛">
+        </div>
+        <div class="form-group">
+          <label>Avatar Image URL</label>
+          <input type="text" id="editAvatarInput" required>
+        </div>
+        <div class="form-group">
+          <label>Cover Photo URL</label>
+          <input type="text" id="editCoverInput" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="app.closeEditProfileModal()">Cancel</button>
+          <button type="submit" class="btn-primary-gradient">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Create New User Persona Modal -->
+  <div class="modal-overlay" id="newUserModal" style="display: none;" onclick="app.closeNewUserModalOnBackdrop(event)">
+    <div class="modal-dialog small-dialog">
+      <button class="modal-close-btn" onclick="app.closeNewUserModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-user-plus text-saffron"></i> Join Charcha Bharat</h3>
+        <p class="modal-subtitle">Create a brand new creator persona on the platform</p>
+      </div>
+      <form id="newUserForm" onsubmit="app.handleCreateUser(event)">
+        <div class="form-group">
+          <label>Username (handle)</label>
+          <div class="input-with-prefix">
+            <span class="prefix">@</span>
+            <input type="text" id="newUsernameInput" placeholder="kabir_singh" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="newNameInput" placeholder="Kabir Singh" required>
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="newLocationInput" placeholder="Mumbai, Maharashtra" required>
+        </div>
+        <div class="form-group">
+          <label>Bio</label>
+          <textarea id="newBioInput" rows="2" placeholder="Cinematographer & story teller from Mumbai 🎥"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Badge</label>
+          <input type="text" id="newBadgeInput" placeholder="Filmmaker 🎬">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="app.closeNewUserModal()">Cancel</button>
+          <button type="submit" class="btn-primary-gradient">Create Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Story Viewer Modal -->
+  <div class="modal-overlay story-modal-overlay" id="storyModal" style="display: none;" onclick="app.closeStoryModalOnBackdrop(event)">
+    <div class="story-container">
+      <button class="story-close-btn" onclick="app.closeStoryModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="story-progress-bar">
+        <div class="story-progress-fill" id="storyProgressFill"></div>
+      </div>
+
+      <div class="story-author-bar">
+        <img id="storyAuthorAvatar" src="" alt="Story author" class="story-avatar">
+        <div class="story-author-info">
+          <span id="storyAuthorName" class="story-name">Name</span>
+          <span id="storyAuthorLocation" class="story-location">Location</span>
+        </div>
+      </div>
+
+      <div class="story-media-wrapper">
+        <img id="storyMediaImg" src="" alt="Story">
+      </div>
+
+      <div class="story-caption" id="storyCaption">
+        Caption here...
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- App JavaScript -->
+  <script src="js/app.js"></script>
+</body>
+</html>
